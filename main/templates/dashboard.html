@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Super Duper Tutor Router // Dashboard</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="/user/{{this_user.id}}">My Account</a> | <a href="/logout">Logout</a></p>
+        </div>
+        <div class="nav">
+            <p>
+                <span>Home</span> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>        
+        </div>
+        <a id="back" href ="javascript:history.back()">Back</a>
+        <div class="container">
+            {% if this_user.user_type == "Tutor" %}
+                <h2>Welcome, {{this_user.first_name}}!</h2>
+            {% endif %}
+            {% if this_user.user_type == "Learner" %}
+                <h2>Welcome, {{this_user.username}}!</h2>
+            {% endif %}
+            
+            {% if this_user.user_type == "Learner" %}
+            <h3 id = "myposts">My Posts</h3>
+            <div class="dash-tutor-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="date">Date Posted</th>
+                            <th id='subject'>Subject</th>
+                            <th id='course'>Course</th>
+                            <th id='topic'>Topic</th>
+                            <th id='comment'>Description</th>
+                            <th id='posted-by'>Posted By</th>
+                        </tr>
+                    </thead>
+                    {% for request in all_requests %}
+                    <tbody>
+                        {% if request.poster == this_user %}
+                        <tr>
+                            <td>{{request.created_at}}</td>
+                            <td>{{request.subject}}</td>
+                            <td>{{request.course}}</td>
+                            <td><a href="/tutor-help/{{request.id}}">{{request.topic}}</a></td>
+                            <td><p>{{request.desc}}</p></td>
+                            <td>{{request.poster.username}}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+
+            {% if this_user.user_type == "Tutor" %}
+            <h3 id = "myposts">My Contributions</h3>
+            <div class="dash-tutor-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="date">Date Posted</th>
+                            <th id="subject">Subject</th>
+                            <th id="course">Course</th>
+                            <th id="topic">Topic</th>
+                            <th id="comment">Comment</th>
+                            <th id="posted-by">Posted By</th>
+                        </tr>
+                    </thead>
+                    {% for comment in all_comments %}
+                    <tbody>
+                        {% if comment.poster == this_user %}
+                        <tr>
+                            <td>{{comment.created_at}}</td>
+                            <td>{{comment.request.subject}}</td>
+                            <td>{{comment.request.course}}</td>
+                            <td><a href="/tutor-help/{{comment.request.id}}">{{comment.request.topic}}</a></td>
+                            <td><p>{{comment.comment}}</p></td>
+                            <td>{{comment.request.poster.username}}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <p><a href="/about">About</a> / <a href="">Contact Us</a></p>
+        </div>
+    </div>
+    
+</body>
+</html>

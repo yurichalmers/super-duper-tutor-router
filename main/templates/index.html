@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Super Duper Tutor Router!</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="">About</a></p>
+        </div>
+        <div class="error-messages">
+            {% for error in messages %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="container">
+            <div class="login-box">
+                <div class="login-user">
+                    <h3>Login</h3>
+                    <form action="/login-user" method="POST">
+                    {% csrf_token %}
+                    <div class="add-category">
+                        <label for="">Email: </label>
+                            <input type="text" name="email">
+                        </div>
+                        <div class="add-category">
+                            <label for="">Password: </label>
+                            <input type="password" name="password">
+                        </div>
+                        <div>
+                            <button>Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><a href="/register"></p>Don't have an account? Register here.</a></p>
+        </div>
+    </div>
+</body>
+</html>

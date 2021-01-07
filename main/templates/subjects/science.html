@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Science // SDTR</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="/user/{{this_user.id}}">My Account</a> | <a href="/logout">Logout</a></p>
+        </div>
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <span>Science</span> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        <a id="back" href ="javascript:history.back()">Back</a>
+        <div class="container">
+            <h2>Science Tutor Request Board</h2>
+            <div class="tutor-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id='date'>Date Posted</th>
+                            <th id='course'>Course</th>
+                            <th id='topic'>Topic</th>
+                            <th id='comment'>Description</th>
+                            <th id='posted-by'>Posted By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for science in all_science %}
+                        <tr>
+                            <td>{{science.created_at}}</td>
+                            <td>{{science.course}}</td>
+                            <td><a href="/tutor-help/{{science.id}}">{{science.topic}}</a></td>
+                            <td><p>{{science.desc}}</p></td>
+                            <td>{{science.poster.username}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if this_user.user_type == "Learner" %}
+            <div class="add-request">
+                <form action="/add-science-request" method="POST">
+                    {% csrf_token %}
+                    <div class="add-category">
+                        <label for="">Course: </label>
+                        <select name= "course" id="">
+                            <option></option>
+                            <option disabled>Middle School Sciences</option>
+                            <option value="Earth Science">Earth Science</option>
+                            <option value="Biological Science">Biological Science</option>
+                            <option value="Chemical Science">Chemical Science</option>
+                            <option disabled></option>
+                            <option disabled>High School Sciences</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Physics">Physics</option>
+                            <option value="AP Biology">AP Biology</option>
+                            <option value="AP Chemistry">AP Chemistry</option>
+                            <option value="AP Physics">AP Physics</option>
+                            <option disabled></option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="add-category">
+                        <label for="">Topic: </label>
+                        <input type="text" name="topic">
+                    </div>
+                    <div class="add-category">
+                        <textarea name="desc" id="" cols="37" rows="10" placeholder="Please elaborate on what you need help with."></textarea>
+                    </div>
+                    <div>
+                        <button>Add Request</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <p><a href="/about">About</a> / <a href="">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>

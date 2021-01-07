@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>topic</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="/user/{{this_user.id}}">My Account</a> | <a href="/logout">Logout</a></p>
+        </div>
+        {% if this_topic.subject == "Math" %}
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <span>Math</span> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        {% endif %}
+        {% if this_topic.subject == "Science" %}
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <span>Science</span> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        {% endif %}
+        {% if this_topic.subject == "English" %}
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <span>English</span> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        {% endif %}        
+        {% if this_topic.subject == "History" %}
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <span>History</span> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        {% endif %}        
+        {% if this_topic.subject == "Foreign Language" %}
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <span>Foreign Language</span> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        {% endif %}
+        {% if this_topic.subject == "Other" %}
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <span>Miscellaneous</span>
+            </p>
+        </div>
+        {% endif %}
+        <a id="back" href ="javascript:history.back()">Back</a>
+        <div class="container">
+            <div class="topic-info">
+                <div class="view-category">
+                    <h4>Subject: </h4>
+                    <p>{{this_topic.subject}}</p>
+                </div>
+                <div class="view-category">
+                    <h4>Course: </h4>
+                    <p>{{this_topic.course}}</p>
+                </div>
+                <div class="view-category">
+                    <h4>Topic: </h4>
+                    <p>{{this_topic.topic}}</p>
+                </div>
+                <div class="view-category">
+                    <h4>Description: </h4>
+                    <p>{{this_topic.desc}}</p>
+                </div>
+                <div class="view-category">
+                    <h4>Posted by: </h4>
+                    <p>{{this_topic.poster.username}}</p>
+                </div>
+                <div class="view-category">
+                    <h4>Posted at: </h4>
+                    <p>{{this_topic.created_at}}</p>
+                </div>
+                {%if this_topic.poster == this_user %}
+                    <form action="/edit" method="POST">
+                    {% csrf_token %}
+                        <button>Edit Post</button>
+                    </form>
+                {% endif %}
+            </div>
+            <div class="comments">
+                {% for comment in this_topic.comments.all %}
+                <div class="display-comments">
+                    {% if comment.poster.user_type == "Tutor" %}
+                    <h4><a href="/tutor/{{comment.poster.id}}">{{comment.poster.first_name}} {{comment.poster.last_name}}</a> (Tutor)
+                        <span> {{comment.created_at}}</span>
+                    </h4>
+                    {% endif %}
+                    {% if comment.poster.user_type == "Learner" %}
+                    <h4>{{comment.poster.username}}
+                        <span> {{comment.created_at}}</span>
+                    </h4>
+                    {% endif %}
+                    <p>{{comment.comment}}</p>
+                </div>
+                {% endfor %}
+                <div class="comment-box">
+                    <form action="/tutor-help/{{this_topic.id}}/add-comment" method="POST">
+                        {% csrf_token %}
+                        <div>
+                            <textarea name="comment" id="" cols="40" rows="6" placeholder="Write comment here...."></textarea>
+                        </div>
+                        <div>
+                            <button>Post Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="footer">
+            <p><a href="/about">About</a> / <a href="">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>

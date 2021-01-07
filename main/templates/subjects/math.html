@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Math // SDTR</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="/user/{{this_user.id}}">My Account</a> | <a href="/logout">Logout</a></p>
+        </div>
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <span>Math</span> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        <a id="back" href ="javascript:history.back()">Back</a>
+        <div class="container">
+            <h2>Math Tutor Request Board</h2>
+            <div class="tutor-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id='date'>Date Posted</th>
+                            <th id='course'>Course</th>
+                            <th id='topic'>Topic</th>
+                            <th id='comment'>Description</th>
+                            <th id='posted-by'>Posted By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for math in all_math %}
+                        <tr>
+                            <td>{{math.created_at}}</td>
+                            <td>{{math.course}}</td>
+                            <td><a href="/tutor-help/{{math.id}}">{{math.topic}}</a></td>
+                            <td><p>{{math.desc}}</p></td>
+                            <td>{{math.poster.username}}</td>    
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if this_user.user_type == "Learner" %}
+            <div class="add-request">
+                <form action="/add-math-request" method="POST">
+                    {% csrf_token %}
+                    <div class="add-category">
+                        <label for="">Course: </label>
+                        <select name= "course" id="">
+                            <option></option>
+                            <option disabled>Middle School Math</option>
+                            <option value="Pre-Algebra">Pre-Algebra</option>
+                            <option value="Algebra I">Algebra I</option>
+                            <option disabled></option>
+                            <option disabled>High School School Math</option>
+                            <option value="Algebra II">Algebra II</option>
+                            <option value="Geometry">Geometry</option>
+                            <option value="Pre-Calculus">Pre-Calculus</option>
+                            <option value="Calculus">Calculus</option>
+                            <option value="Statistics">Statistics</option>
+                            <option disabled></option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="add-category">
+                        <label for="">Topic: </label>
+                        <input type="text" name="topic">
+                    </div>
+                    <div class="add-category">
+                        <textarea name="desc" id="" cols="37" rows="10" placeholder="Please elaborate on what you need help with."></textarea>
+                    </div>
+                    <div>
+                        <button>Add Request</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <p><a href="/about">About</a> / <a href="">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>

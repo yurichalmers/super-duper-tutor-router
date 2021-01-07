@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History // SDTR</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="/user/{{this_user.id}}">My Account</a> | <a href="/logout">Logout</a></p>
+        </div>
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <span>History</span> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        <a id="back" href ="javascript:history.back()">Back</a>
+        <div class="container">
+            <h2>History Tutor Request Board</h2>
+            <div class="tutor-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id='date'>Date Posted</th>
+                            <th id='course'>Course</th>
+                            <th id='topic'>Topic</th>
+                            <th id='comment'>Description</th>
+                            <th id='posted-by'>Posted By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for history in all_history %}
+                        <tr>
+                            <td>{{history.created_at}}</td>
+                            <td>{{history.course}}</td>
+                            <td><a href="/tutor-help/{{history.id}}">{{history.topic}}</a></td>
+                            <td><p>{{history.desc}}</p></td>
+                            <td>{{history.poster.username}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if this_user.user_type == "Learner" %}
+            <div class="add-request">
+                <form action="/add-history-request" method="POST">
+                    {% csrf_token %}
+                    <div class="add-category">
+                        <label for="">Course: </label>
+                        <select name= "course" id="">
+                            <option></option>
+                            <option value="Middle School Social Studies">Middle School Social Studies</option>
+                            <option disabled></option>
+                            <option disabled>High School History</option>
+                            <option value="European History">European History</option>
+                            <option value="World History">World History</option>
+                            <option value="US History">US History</option>
+                            <option value="AP European History">AP European History</option>
+                            <option value="AP World History">AP World History</option>
+                            <option value="AP US History">AP US History</option>
+                            <option disabled></option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="add-category">
+                        <label for="">Topic: </label>
+                        <input type="text" name="topic">
+                    </div>
+                    <div class="add-category">
+                        <textarea name="desc" id="" cols="37" rows="10" placeholder="Please elaborate on what you need help with."></textarea>
+                    </div>
+                    <div>
+                        <button>Add Request</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <p><a href="/about">About</a> / <a href="">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>

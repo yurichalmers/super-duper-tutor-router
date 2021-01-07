@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{this_tutor.first_name}} {{this_tutor.last_name}}</title>
+</head>
+<body>
+    <div class="container-all">
+        <div class="superheader">
+            <h1>Super Duper Tutor Router</h1>
+            <p><a href="/user/{{this_user.id}}">My Account</a> | <a href="/logout">Logout</a></p>
+        </div>  
+        <div class="nav">
+            <p>
+                <a href="/dashboard">Home</a> //
+                <a href="/dashboard/math">Math</a> /
+                <a href="/dashboard/science">Science</a> /
+                <a href="/dashboard/english">English</a> /
+                <a href="/dashboard/history">History</a> /
+                <a href="/dashboard/foreign-language">Foreign Language</a> /
+                <a href="/dashboard/misc">Miscellaneous</a>
+            </p>
+        </div>
+        <a id="back" href ="javascript:history.back()">Back</a>
+        <div class="container">
+            <div class="tutor-info">
+                <h2>{{this_tutor.first_name}} {{this_tutor.last_name}}</h2>
+                <div class="view-categoryT">
+                    <h4>Highest Level of Education: </h4>
+                    <p>{{this_tutor.level}}</p>
+                </div>
+                <div class="view-categoryT">
+                    <h4>Number of Contributions: </h4>
+                    <p>{{num_contrib}} Post(s)</p>
+                </div>
+                <div class="view-categoryT">
+                    <h4>Past Contributions: </h4>
+                    <ul>
+                        {% for comment in this_tutor.comments.all %}
+                        <li><a href="/tutor-help/{{comment.request.id}}">{{comment.request.topic}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class = "one-on-one">
+                    <form action="" method="POST">
+                    {% csrf_token %}
+                        <button>Request 1-on-1</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p><a href="/about">About</a> / <a href="">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>
